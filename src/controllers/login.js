@@ -16,17 +16,9 @@ module.exports = {
 			});
 	},
 	register: (req, res) => {
-		const { username, name, email, phone, address, birth, gender, image, password } = req.body;
 		const data = {
-			username: username,
-			name: name,
-			email: email,
-			phone: phone,
-			address: address,
-			birth: birth,
-			gender: parseFloat(gender),
-			image: req.file ? req.file.filename : image,
-			password: password,
+			username: req.body.username,
+			password: req.body.password,
 		};
 
 		login

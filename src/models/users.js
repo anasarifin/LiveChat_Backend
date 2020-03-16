@@ -1,19 +1,20 @@
 const conn = require("../configs/database");
 
 module.exports = {
-	getUsers: id => {
-		// const page = query.page ? "LIMIT " + (query.page * 8 - 8) + ", 8" : "";
-		// const dir = query.dir ? "DESC" : "ASC";
-		// const sort = query.sort || "name";
-		// const name = query.name ? "WHERE name LIKE '%" + query.name + "%'" : "";
-		// const id = query.id ? "WHERE id = '" + query.id + "'" : "";
-		// const helper = query.name ? "AND " : "WHERE ";
-		// const type = query.type ? helper + "category_id = '" + query.type + "'" : "";
-
+	getUsers: username => {
 		return new Promise(resolve => {
-			conn.query(`SELECT * FROM users WHERE id = '${id}'`, (err, result) => {
+			conn.query(`SELECT * FROM users WHERE username = '${username}'`, (err, result) => {
 				if (err) console.log(err);
 				if (!result[0]) result = { msg: "User not found..." };
+				resolve(result);
+			});
+		});
+	},
+	getUsersBatch: data => {
+		return new Promise(resolve => {
+			conn.query(`SELECT * FROM users WHERE username IN ${data}`, (err, result) => {
+				if (err) console.log(err);
+				if (!result) result = { msg: "User not found..." };
 				resolve(result);
 			});
 		});
@@ -29,9 +30,9 @@ module.exports = {
 			});
 		});
 	},
-	updateUsers: (id, data) => {
+	updateUsers: (username, data) => {
 		return new Promise((resolve, reject) => {
-			conn.query(`UPDATE users SET ? WHERE id = ${id}`, data, (err, result) => {
+			conn.query(`UPDATE users SET ? WHERE username = '${username}'`, data, (err, result) => {
 				if (!err) {
 					resolve(result);
 				} else {

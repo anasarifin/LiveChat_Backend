@@ -6,16 +6,17 @@ const storage = multer.diskStorage({
 		callback(null, "./public/img");
 	},
 	filename: function(req, file, callback) {
-		callback(null, new Date().toISOString().replace(/:/g, "-") + file.originalname);
+		callback(null, req.params.username + '_-_' + file.originalname);
 	},
 });
 const upload = multer({
 	storage: storage,
 });
 
-router.get("/users/:id", users.getUsers);
+router.get("/users/:username", users.getUsers);
+router.post("/users/batch", users.getUsersBatch);
 // router.post("/users", upload.single("image"), users.insertUsers);
-router.patch("/users/:id", upload.single("image"), users.updateUsers);
+router.patch("/users/:username", upload.single("image"), users.updateUsers);
 router.delete("/users/:id", users.deleteUsers);
 
 module.exports = router;

@@ -4,29 +4,18 @@ const imagePath = "http://localhost:9999/public/img/";
 
 module.exports = {
 	getUsers: (req, res) => {
-		users.getUsers(req.params.id).then(result => {
+		users.getUsers(req.params.username).then(result => {
 			res.json(result);
 		});
 	},
-	// insertUsers: (req, res) => {
-	// 	const { username, name, email, phone, address, birth, gender, image, password } = req.body;
-	// 	const data = {
-	// 		username: username,
-	// 		name: name,
-	// 		email: email,
-	// 		phone: phone,
-	// 		address: address,
-	// 		birth: birth,
-	// 		gender: parseFloat(gender),
-	// 		image: req.file ? imagePath + req.file.filename : image,
-	// 		password: password,
-	// 	};
-	// 	users.insertUsers(data).then(result => {
-	// 		res.json(result);
-	// 	});
-	// },
+	getUsersBatch: (req, res) => {
+		// const parse = JSON.parse(req.body.data);
+		// const data = parse.slice(1, parse.length - 1);
+		users.getUsersBatch(req.body.data).then(result => {
+			res.json(result);
+		});
+	},
 	updateUsers: (req, res) => {
-		const id = req.params.id;
 		const { name, email, phone, address, birth, gender, image } = req.body;
 		const data = {};
 		if (name) {
@@ -47,11 +36,11 @@ module.exports = {
 		if (gender) {
 			data.gender = parseFloat(gender);
 		}
-		if (image) {
-			data.image = req.file ? imagePath + req.file.filename : image;
+		if (req.file) {
+			data.image = req.file.filename;
 		}
 
-		users.updateUsers(id, data).then(result => {
+		users.updateUsers(req.params.username, data).then(result => {
 			res.json(result);
 		});
 	},
